@@ -2,62 +2,63 @@
 #include<cstdlib>
 #include <cmath>
 
-bool wygranko(int q[], int col) {
+
+bool isOk(int queen[], int col) {
     for (int i = 0; i < col; i++) {
-        if ((q[i] == q[col]) || (abs(q[col] - q[i]) == (col - i))) {
+        if ((queen[i] == queen[col]) || (abs(queen[col] - queen[i]) == (col - i))) {
             return false;
         }
     }
     return true;
 }
 
-void outOfChessBoard(int& col) {
+void backTrack(int& col) {
     col--;
     if (col == -1) exit(1);
 }
 
-void printBoard(int q[]) {
+void printBoard(int queen[]) {
     int board[4][4] = { 0 };
 
-    for (int i = 0; i < 4; i++)
-    {
-        board[q[i]][i] = 1;
+    for (int i = 0; i < 4; i++) {
+        board[queen[i]][i] = 1;
     }
 
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
             std::cout << board[i][j] << " ";
+        }
         std::cout << std::endl;
     }
 }
 
 int main()
 {
-    int hetman[4];
-    hetman[0] = 0;
-    int column = 1;
+    int hetman[4]{}, column = 1;
 
-    bool outOfRange = false;
+    bool fromBackTrack = false;
 
     while (column < 4) {
-        if (!outOfRange)
+        if (!fromBackTrack) {
             hetman[column] = -1;
-        outOfRange = false;
+        }
+
+        fromBackTrack = false;
+
         while (hetman[column] < 4) {
             hetman[column]++;
 
             while (hetman[column] == 4) {
-                outOfChessBoard(column);
+                backTrack(column);
                 hetman[column]++;
             }
-            if (wygranko(hetman, column))
-                break;
 
+            if (isOk(hetman, column))
+                break;
         }
         column++;
     }
     printBoard(hetman);
-    outOfChessBoard(column);
-    outOfRange = true;
+
+    return 0;
 }
